@@ -57,7 +57,7 @@ app.post('/admin/vagas/nova', async (req, res) =>{
     await db.run(`insert into tblvagas(categoria,titulo,descricao) values(${categoria},'${titulo}','${descricao}')` )
     res.redirect('/admin/vagas')
 })
-
+//comment
 app.post('/admin/vagas/editar/:id', async (req, res) =>{
     const {titulo, descricao, categoria} = req.body
     const { id} = req.params
