@@ -23,7 +23,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.get('/',async (request, response) => {
-    const adm =  req.hostname === 'localhost' ? true : false;
     const db = await dbConection
     const categoriasDb =await db.all('select * from tblcategorias')
     const vagas =await db.all('select * from tblvagas')
@@ -34,8 +33,7 @@ app.get('/',async (request, response) => {
         }
     })
     response.render('home', {
-        categorias,
-        adm
+        categorias        
     })
 })
 
@@ -55,6 +53,13 @@ app.get('/admin/vagas', async(req, res) => {
     const vagas = await db.all('select * from tblvagas;')
     res.render('admin/vagas', { vagas })
 })
+
+app.get('/admin/categorias', async(req, res) => {
+    const db = await dbConection
+    const categorias = await db.all('select * from tblcategorias;')
+    res.render('admin/categorias', { categorias })
+})
+
 app.get('/admin/vagas/delete/:id', async(req, res) => {
     const db = await dbConection
     await db.run('delete from tblvagas where id='+req.params.id+'')
@@ -82,11 +87,39 @@ app.post('/admin/vagas/editar/:id', async (req, res) =>{
     res.redirect('/admin/vagas')
 })
 
+app.post('/admin/categorias/editar/:id', async (req, res) =>{
+    const {categoria} = req.body
+    const { id} = req.params
+    const db = await dbConection
+    await db.run(`update tblcategorias set categoria='${categoria}' where id =${id}` )
+    res.redirect('/admin/categorias')
+})
+
 app.get('/admin/vagas/editar/:id', async(req, res) => {
     const db = await dbConection
     const categorias = await db.all('select * from tblcategorias;')
     const vaga = await db.get('select * from tblvagas where id = '+req.params.id+';')
    res.render('admin/editar-vaga', {categorias,vaga})
+})
+app.get('/admin/categorias/editar/:id', async(req, res) => {
+    const db = await dbConection
+    const categorias = await db.get('select * from tblcategorias where id = '+req.params.id+';')
+   res.render('admin/editar-categoria', {categorias})
+})
+
+app.get('/admin/categorias/delete/:id', async(req, res) => {
+    const db = await dbConection
+    await db.run('delete from tblcategorias where id='+req.params.id+'')
+    res.redirect('/admin/categorias')
+})
+app.post('/admin/categorias/nova', async (req, res) =>{
+    const {titulo, descricao, categoria} = req.body
+    const db = await dbConection
+    await db.run(`insert into tblcategorias(categoria) values('${categoria}')` )
+    res.redirect('/admin/categorias')
+})
+app.get('/admin/categorias/nova', async(req, res) => {
+   res.render('admin/nova-categoria')
 })
 const init = async() => {
     /*const db = await dbConection
