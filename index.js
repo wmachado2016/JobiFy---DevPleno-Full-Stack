@@ -68,14 +68,14 @@ app.get('/admin/vagas/delete/:id', async(req, res) => {
 
 app.get('/admin/vagas/nova', async(req, res) => {
     const db = await dbConection
-    const categorias = await db.all('select * from tblcategorias;')
-   res.render('admin/nova-vaga', {categorias})
+    const categorias = await db.all('select * from tblcategorias')
+    res.render('admin/nova-vaga', { categorias })
 })
 
-app.post('/admin/vagas/nova', async (req, res) =>{
-    const {titulo, descricao, categoria} = req.body
+app.post('/admin/vagas/nova', async(req, res) => {
+    const { titulo, descricao, categoria } = req.body
     const db = await dbConection
-    await db.run(`insert into tblvagas(categoria,titulo,descricao) values(${categoria},'${titulo}','${descricao}')` )
+    await db.run(`insert into tblvagas(categoria, titulo, descricao) values(${categoria}, '${titulo}', '${descricao}')`)
     res.redirect('/admin/vagas')
 })
 //comment
