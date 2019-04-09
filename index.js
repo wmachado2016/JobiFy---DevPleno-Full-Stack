@@ -22,7 +22,8 @@ app.set('view engine', 'ejs')
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.get('/',async (request, response) => { 
+app.get('/',async (request, response) => {
+    const adm =  req.hostname === 'localhost' ? true : false;
     const db = await dbConection
     const categoriasDb =await db.all('select * from tblcategorias')
     const vagas =await db.all('select * from tblvagas')
@@ -33,7 +34,8 @@ app.get('/',async (request, response) => {
         }
     })
     response.render('home', {
-        categorias
+        categorias,
+        adm
     })
 })
 
