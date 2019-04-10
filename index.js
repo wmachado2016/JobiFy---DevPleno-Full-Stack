@@ -7,7 +7,8 @@ const path = require('path')
 const sqlite = require('sqlite')
 const dbConection = sqlite.open(path.resolve(__dirname, 'banco.sqlite'), { Promise })
 
-const port = process.env.PORT || 3000app.use('/admin', (req, res, next) => {
+const port = process.env.PORT || 3000
+app.use('/admin', (req, res, next) => {
     if(req.hostname === 'localhost'){
         next()
     }else{
