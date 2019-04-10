@@ -24,8 +24,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.get('/',async (request, response) => {
     const db = await dbConection
-    const categoriasDb =await db.all('select * from tblcategorias')
-    const vagas =await db.all('select * from tblvagas')
+    const categoriasDb =await db.all('select * from tblcategorias;')
+    const vagas =await db.all('select * from tblvagas;')
     const categorias = categoriasDb.map(cat => {
         return{
             ...cat,
@@ -97,10 +97,11 @@ app.post('/admin/categorias/editar/:id', async (req, res) =>{
 
 app.get('/admin/vagas/editar/:id', async(req, res) => {
     const db = await dbConection
-    const categorias = await db.all('select * from tblcategorias;')
-    const vaga = await db.get('select * from tblvagas where id = '+req.params.id+';')
-   res.render('admin/editar-vaga', {categorias,vaga})
+    const categorias = await db.all('select * from tblcategorias')
+    const vaga = await db.get('select * from tblvagas where id = '+req.params.id)
+    res.render('admin/editar-vaga', { categorias, vaga })
 })
+
 app.get('/admin/categorias/editar/:id', async(req, res) => {
     const db = await dbConection
     const categorias = await db.get('select * from tblcategorias where id = '+req.params.id+';')
